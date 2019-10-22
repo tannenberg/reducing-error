@@ -1,0 +1,5 @@
+# here we specify files, file types or folder that we want dont want to store on github
+
+# for example we don't need to version control the log files from compiling
+
+*.log

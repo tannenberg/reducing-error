@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571783643004.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4189738256",
+    "id" : "59881018",
+    "lastKnownWriteTime" : 1571783813,
+    "last_content_update" : 1571783813328,
+    "path" : "~/reducing-error/code/get_survey.R",
+    "project_path" : "code/get_survey.R",
+    "properties" : {
+        "cursorPosition" : "12,38",
+        "scrollLine" : "9"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
