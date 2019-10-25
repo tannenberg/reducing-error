@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "4189738256",
+    "hash" : "3453577825",
     "id" : "59881018",
-    "lastKnownWriteTime" : 1571783813,
-    "last_content_update" : 1571783813328,
+    "lastKnownWriteTime" : 1571786897,
+    "last_content_update" : 1571786897250,
     "path" : "~/reducing-error/code/get_survey.R",
     "project_path" : "code/get_survey.R",
     "properties" : {
-        "cursorPosition" : "12,38",
-        "scrollLine" : "9"
+        "cursorPosition" : "30,0",
+        "scrollLine" : "23"
     },
     "read_only" : false,
     "read_only_alternatives" : [

@@ -7,6 +7,3 @@
 # until published we might not want to store our data on git so we can specify name to ignore that
 
 survey-data.csv
-
-
-*.Rhistory
