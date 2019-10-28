@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3919267655",
+    "hash" : "0",
     "id" : "59901F0A",
     "lastKnownWriteTime" : 1571752621,
     "last_content_update" : 1571752621,
     "path" : "~/reducing-error/pre-analysis-plan.Rmd",
     "project_path" : "pre-analysis-plan.Rmd",
     "properties" : {
-        "cursorPosition" : "12,20",
+        "cursorPosition" : "13,33",
         "scrollLine" : "0"
     },
     "read_only" : false,

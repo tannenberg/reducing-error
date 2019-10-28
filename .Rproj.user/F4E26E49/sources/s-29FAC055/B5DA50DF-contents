@@ -9,7 +9,7 @@ library(lubridate)
 surveys <- all_surveys()
 surveys
 
-#we want data from the 5th one in the list (for now it generated test data)
+#we want data from the 5th one in the list (at least among my list of surveys)
 df <- fetch_survey(surveys$id[5], convert = FALSE, force_request = TRUE)
 names(df)
 
@@ -21,15 +21,15 @@ df <- df %>%
          placebo_1_direct:sponsor, 
          lat = LocationLatitude, lng = LocationLongitude, LocationAccuracy) %>% 
   mutate(imc_1 = ifelse(is.na(IMC_1_1) & is.na(IMC_1_2) & is.na(IMC_1_4) & is.na(IMC_1_5) & is.na(IMC_1_6), 
-                        "pass", "fail"),
-         imc_2_1 = ifelse(imc_2_1 == "说不上同意或反对", "pass", "fail"), 
-         imc_2_2 = ifelse(imc_2_2 == "强烈同意", "pass", "fail"),
-         attentive_imc = ifelse(imc_1 == "pass" & imc_2_1 == "pass" & imc_2_2 == "pass",
-                                "attentive", "inattentive"), 
+                        1, 0),
+         imc_2_1 = ifelse(imc_2_1 == "说不上同意或反对", 1, 0), 
+         imc_2_2 = ifelse(imc_2_2 == "强烈同意", 1, 0),
+         attentive_imc = ifelse(imc_1 == 1 & imc_2_1 == 1 & imc_2_2 == 1,
+                                1, 0), 
          audit = ifelse(is.na(audit), "control", "received"), 
-         fmc_a = ifelse(fmc_a == "在我们国家，空气污染是一个重要的问题。", "pass", "fail"),
-         fmc_b = ifelse(fmc_b == "政府就像是家长，应该告诉人民应该做什么。", "pass", "fail"),
-         fmc_e = ifelse(fmc_e == "政府为所有人提供优质的公共服务。", "pass", "fail"),
+         fmc_a = ifelse(fmc_a == "在我们国家，空气污染是一个重要的问题。", 1, 0),
+         fmc_b = ifelse(fmc_b == "政府就像是家长，应该告诉人民应该做什么。", 1, 0),
+         fmc_e = ifelse(fmc_e == "政府为所有人提供优质的公共服务。", 1, 0),
          c_direct_dk = ifelse(c_direct == "不想回答", 1, 0), #for priming checks
          d_direct_dk = ifelse(d_direct == "不想回答", 1, 0), #and filter drop DK
          e_direct_dk = ifelse(e_direct == "不想回答", 1, 0), #in main analysis
