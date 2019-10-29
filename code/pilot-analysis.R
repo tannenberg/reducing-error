@@ -18,7 +18,7 @@ df <- import("data/survey-data.csv") %>%
 #How many pass the imc/s?
 #imc_1 (click next), imc_2_1 (chose middle option), imc_2_2 (two greater than one)
 
-df %>% select(imc_1, imc_2_1, imc_2_2) %>% 
+df %>% select(imc_1, imc_2_1, imc_2_2, imc_2_2_inc_somewhat) %>% 
   gather() %>% 
   group_by(key, value) %>% 
   summarise(N=n())
@@ -54,7 +54,6 @@ df %>%
 
 
 # whats the correlation structure between all our attentiveness meassures?
-# size corresponds to
 df %>% 
   select(imc_1, imc_2_1, imc_2_2, fmc_a:fmc_e) %>% 
   cor() %>% 
@@ -234,8 +233,8 @@ rbind(a,b,c) %>%
   filter(term!="(Intercept)") %>%
   mutate(model = c("a", "b", "c")) %>%  
   dotwhisker::dwplot(vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2),
-                                dot_args = list(aes(color = fmc), size = 3),
-                                whisker_args = list(aes(color = fmc)), dodge_size = .7) +
+                                dot_args = list(aes(color = model), size = 3),
+                                whisker_args = list(aes(color = model)), dodge_size = .7) +
   labs(title = "Estimated effect of audit message \non passing fmc")
 
 #how about audit on time?
@@ -247,5 +246,11 @@ lm(time_spent ~ audit, data = df) %>%
                      whisker_args = list(), dodge_size = .7) +
   labs(title = "Estimated effect of audit message \non time spent")
   
+#prmse for audit/non audit
+df_audit <- df %>% filter(audit == "received")
+df_no_audit <- df %>% filter(audit == "control")
 
+prmse_a_audit <-  prmse(estimand = .25, df_audit$a_treatment, df_audit$a_control)
+prmse_a_no_audit <-  prmse(estimand = .25, df_no_audit$a_treatment, df_no_audit$a_control)
 
+prmse_a_audit < prmse_a_no_audit #actually that says very little lets just look at the values for now. 
