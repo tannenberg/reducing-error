@@ -48,14 +48,14 @@ df %>%
 # lets look at this using different attention filters
 
 df %>% 
-  ggplot(aes(x=time_spent/60, fill = as.factor(imc_2_1))) +
+  ggplot(aes(x=time_spent/60, fill = as.factor(imc_2_2_inc_somewhat))) +
   geom_density(alpha= .5) +
   scale_fill_viridis_d()
 
 
 # whats the correlation structure between all our attentiveness meassures?
 df %>% 
-  select(imc_1, imc_2_1, imc_2_2, fmc_a:fmc_e) %>% 
+  select(imc_1, imc_2_1, imc_2_2_inc_somewhat, imc_2_2, fmc_a:fmc_e) %>% 
   cor() %>% 
   corrplot::corrplot(., 
                    tl.col = "black", 
@@ -100,8 +100,16 @@ select(a_control:e_treatment) %>%
 #lets see if its better when we drop innatentives:
 
 df %>% 
-filter(attentive_imc == "attentive") %>% 
+filter(imc_2_1 == 1) %>% 
 select(a_control:e_treatment) %>% 
+  gather() %>% 
+  ggplot(aes(x=value)) +
+  geom_histogram() +
+  facet_wrap(~key)
+
+df %>% 
+  filter(imc_2_1 == 0) %>% 
+  select(a_control:e_treatment) %>% 
   gather() %>% 
   ggplot(aes(x=value)) +
   geom_histogram() +
@@ -130,7 +138,7 @@ df %>%
   
 # and are we better at it dropping inattentives?
 df %>% 
-  filter(attentive_imc == "attentive") %>% 
+  filter(imc_2_1 == 1) %>% 
   select(a_control:b_treatment) %>% 
   summarise_all(mean, na.rm=TRUE) %>% 
   mutate(A_dim = a_treatment - a_control, 
@@ -254,3 +262,4 @@ prmse_a_audit <-  prmse(estimand = .25, df_audit$a_treatment, df_audit$a_control
 prmse_a_no_audit <-  prmse(estimand = .25, df_no_audit$a_treatment, df_no_audit$a_control)
 
 prmse_a_audit < prmse_a_no_audit #actually that says very little lets just look at the values for now. 
+

@@ -23,8 +23,8 @@ df <- df %>%
   mutate(imc_1 = ifelse(is.na(IMC_1_1) & is.na(IMC_1_2) & is.na(IMC_1_4) & is.na(IMC_1_5) & is.na(IMC_1_6), 
                         1, 0),
          imc_2_1 = ifelse(imc_2_1 == "说不上同意或反对", 1, 0), 
-         imc_2_2_inc_somewhat = ifelse(imc_2_2 == "强烈同意" | imc_2_2 == "某种程度上同意", 1, 0),
-         imc_2_2 = ifelse(imc_2_2 == "强烈同意", 1, 0),
+         imc_2_2_inc_somewhat = ifelse(imc_2_2 == "强烈不同意" | imc_2_2 == "某种程度上不同意", 1, 0),
+         imc_2_2 = ifelse(imc_2_2 == "强烈不同意", 1, 0),
          attentive_imc = ifelse(imc_1 == 1 & imc_2_1 == 1 & imc_2_2 == 1,
                                 1, 0), 
          audit = ifelse(is.na(audit), "control", "received"), 
@@ -53,7 +53,7 @@ df <- df %>%
   df <-  df %>% mutate_at(vars, keep_digit)
   
 # lets write this data in the data folder note we both have to run this 
-# script to have tha data locally as i put "survey-data.csv" in the .gitignore 
+# script to have tha data localy as i put "survey-data.csv" in the .gitignore 
 
 write_csv(df, "data/survey-data.csv")
 
