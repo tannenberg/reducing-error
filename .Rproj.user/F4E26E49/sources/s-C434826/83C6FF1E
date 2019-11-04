@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1572849199318.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4265218462",
+    "id" : "83C6FF1E",
+    "lastKnownWriteTime" : 1572849696,
+    "last_content_update" : 1572849696371,
+    "path" : "~/reducing-error/pre-analysis-plan.Rmd",
+    "project_path" : "pre-analysis-plan.Rmd",
+    "properties" : {
+        "cursorPosition" : "268,0",
+        "scrollLine" : "267"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

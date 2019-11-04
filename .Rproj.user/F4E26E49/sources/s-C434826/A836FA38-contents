@@ -106,7 +106,7 @@ filter(imc_2_1 == 1) %>%
 select(a_control:e_treatment) %>% 
   gather() %>% 
   ggplot(aes(x=value)) +
-  geom_histogram() +
+  geom_histogram(stat="count") +
   facet_wrap(~key)
 
 df %>% 

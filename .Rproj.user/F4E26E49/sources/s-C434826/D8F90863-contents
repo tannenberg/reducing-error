@@ -1,0 +1,318 @@
+---
+title: 'Reducing measurement error of list experiments'
+subtitle: "Pre-analysis plan"
+author: "Mattias Agerberg and Marcus Tannenberg"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: pdf_document
+indent: true
+bibliography: references.bib
+header-includes:
+    - \usepackage{setspace}
+    - \doublespacing
+
+---
+
+# Abstract
+The *list experiment* is one of the most important tools in social science to elicit truthful responses to sensitive questions. Under some basic assumptions the list experiment can provide an unbiased estimate of the share of affirmative answers to a sensitive question in the population of interest. A drawback of the standard design is that this estimate tends to be quite variable. A large body of recent work concerns developing efficient statistical estimation of the quantity of interest, yet all estimation techniques are typically sensitive to different types of respondent error. This project aims at developing and testing design-based solutions and recommendations to minimize respondent error in list experiments. In particular, we explore different techniques to increase respondent attention in the sample, as a way to minimize non-strategic respondent error. To to evaluate design-based solutions we design a list experiment where the item of interest (the "sensitive" item) has three specific properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics.  We then estimate the root mean squared error for the prediction (pRMSE) of the item of interest under several different conditions: (A) excluding (inattentive) respondents who fail (a) Instructional Manipulation Checks; or (b) Factual Manipulation Checks; and (B) the inclusion of an Audit Warning; and (C) the inclusion of a placebo-statement in the control list.   
+
+
+\newpage
+
+# Introduction
+
+In recent years, the *list experiment* has become one of the most important tools in social science to elicit truthful responses to sensitive questions. Under some basic assumptions, the list experiment can provide an unbiased estimate of the share of affirmative answers to a sensitive question in the population of interest. A drawback of the standard design is that this estimate tends to be quite variable - a consequence of the fact that the estimate is obtained by aggregating the sensitive item with a list of non-sensitive items, where the sensitive item is only given to half of the respondents (the treatment group). This has spurred a large body of work on efficient statistical estimation of the quantity of interest [@aronow2015combining; @blair2012statistical; @corstange2009listit; @imai2011multivariate; @tianetal2017poisson].
+
+However, all estimation techniques are typically sensitive to different types of respondent error [@ahlquist2018error; @blair2019list]. *Strategic* respondent error in list experiments, where the respondent for instance might avoid selecting the maximum or minimum number of items, can generally be minimized by choosing control items (non-sensitive items) in a well-thought-out manner [@glynn2013can]. *Non-strategic* respondent error, on the other hand, arises when respondents provide a *random* response to the list experiment. Given that the list lengths differ between the treatment and control group, this type of error will often be correlated with the treatment and can hence dramatically increase both bias and variance in the estimate of interest [@ahlquist2018error].
+
+Non-strategic respondent error is likely to be high when respondents do not pay enough attention to the survey [@berinsky2014separating]. As many survey experiments nowadays are conducted using online platforms like MTurk, making sure respondents actually provide meaningful responses has become increasingly difficult. While the issue of low respondent effort and attention is well-known, researchers often do not consider it when analyzing their experiments [@harden2018accounting]. Given the challenges to efficient analysis of list experiments in the first place, we should expect these issues to be especially pronounced here. Recent research suggests that this might indeed be the case [@alvarez2019paying].
+
+This project aims at developing and testing design-based solutions and recommendations to minimize respondent error in list experiments. In particular, we explore different techniques to increase respondent attention in the sample, as a way to minimize non-strategic respondent error. We test a number of techniques from previous research to raise the average attentiveness in the sample, including instructive manipulation checks [@berinsky2014separating, @oppenheimer2009imc], and a "warning message" to increase respondent attentiveness [@clifford2015attempts]. We also extend existing methods by developing a factual manipulation check for the list experiment and techniques to include a placebo item in the control list.  
+
+To be able to evaluate the different methods and criteria for excluding inattentive respondents, we design several list experiments where the item of interest (the "sensitive" item) has three specific properties: (1) the true quantity of the item is known, (2) the item is independent of all items on the control list, (3) the item is independent of all (observed and unobserved) respondent characteristics. We construct "sensitive" items that meet these criteria by randomly selecting an item from a list of items for each individual respondent. This way, the expected prevalence for the item on the list is known by design. We can then compare different methods and criteria by estimating the root mean squared error of the prediction for the item of interest (a quantity we define below) under different conditions.
+
+This project contributes to the literature on survey methodology in general and to the growing literature on list experiments in particular.
+
+
+# Methods to reduce non-strategic respondent error in list experiments
+
+In this section we briefly describe the different methods to reduce respondent error that we consider in the study at hand. First, we consider standard "manipulation checks" (or "screeners"). A common type of manipulation check is the instructional manipulation check (IMC) [@oppenheimer2009imc]. IMCs work by instructing respondents to show that they are paying attention. This is done by giving respondents a precise set of instructions to follow when responding to the IMC items which are embedded in the survey. Respondents failing to follow the instructions are classified as "inattentive" and potentially excluded from the data anlysis [@berinsky2014separating]. We also consider a second type of manipulation check that instead asks objective questions about key elements in the experiment. This type of manipulation check, referred to as a factual manipulation check (FMC), thus aims to identify individual attentiveness to experimental information directly [@kane2019no].
+
+Both the IMC and the FMC can be used to identify shirking respondents. It is not, however, obvious what to do with these respondents. Simply excluding respondents might - especially if done in a careless manner - decrease the representativeness of the overall sample or introduce post-treatment bias [@aronow2019note; @berinsky2014separating]. A different strategy is to try to *increase* the average respondent attentiveness. A simple intervention explored by @clifford2015attempts is to provide a "warning message" to the respondents. This is a short message stating that responses are carefully checked and that only responses from participants that demonstrate that they have read and understood the survey will be used. The respondents also have to indicate that they have understood the instructions. The authors find that respondents given this message (referred to as "audit" in the study) are substantially more attentive than respondents in the control group who received no message.^[The authors try several different warning messages but find the "audit" message to be the most effective.]
+
+Finally, a potential problem with the standard list experiment design is that the treatment and control list are of different lenghts. If inattentive respondents answer in a manner that is correlated with the list lenght, for instance by randomly selecting a number between 0 and the maximum number of items on the list, this will bias standard estimators for the prevalence of the sensitive item [@ahlquist2018error]. One strategy is to include a "placebo item"" on the control list to equalize the lenght of the lists. A placebo item in this sense is an item where the true population quantity is zero - the item should hence only increase the lenght of the control list, without changing the expected number of affirmative responses to the control items in the population [@riambau2019placebo]. This strategy theoretically eliminates any bias emanating from the different list lenghts. However, good placebo items can be difficult to design and implement. We discuss this problem and propose different solutions below.  
+
+
+# Some simulation evidence
+
+Before turning to the empirical study, we provide some simulation evidence to demonstrate the potential effectiveness of the methods discussed above. Our general criterion for evaluating the effectiveness of different methods is the root mean squared error of the prediction (pRMSE) for the "sensitive" item:
+
+\begin{equation}
+pRMSE(\hat{\mu}) = \sqrt{Var(\hat{\mu}) + (\mu - \hat{\mu})^2}
+\end{equation}
+
+where $\mu$ is the true quantity of interest (the true prevalence of the item in the population) and $\hat{\mu}$ is the estimated quantity from the list experiment. We simulate two different methods to decrease non-strategic respondent error in list experiments: manipulation checks and the inclusion of a placebo item.
+
+The basic simulation assumes 3000 respondents. The control list consists of 4 independent items, each drawn from a bernoulli distribution. The parameter $p$ was set to 0.5, 0.5, 0.15, and 0.85 for the different items respectively. The treatment list consists of the same 4 items plus a "sensitive" treatment item, drawn from a bernoulli distribution with $p=0.0166$. This basic setup is very close to the setup used in @ahlquist2018error and @blair2019list. In the appendix we discuss and show how changes to this setup affects the simulation results.  
+
+30\% of the total number of "respondents" were randomly assigned to be "inattentive" (for instance, @alvarez2019paying estimates that 36\% of respondents in their experiment were "inattentive", and from an earlier application of the list experiments in a similar setting we estimate 28% of respondents to be inattentive [@robinson2019self]). For inattentive respondents in the control group the outcome was replaced by a draw from a discrete uniform distribution, $U\{0,4\}$, and the outcome for the inattentive treatment group was replaced by a draw from $U\{0,5\}$. @blair2019list argue that this is a plausible model for the behavior of inattentive respondents answering the list experiment.
+
+To simulate the manipulation check, a share of the inattentive respondents ($\pi$) was then randomly excluded from the experiment before analyzing the list experiment, emulating some respondents "getting caught" in one of the manipulation checks. Figure \ref{sim_excluded} shows the mean $pRMSE(\hat{\mu})$ based on 10000 simulated data sets (assuming the setup described above) for different $\pi$; No inatentives excluded ($\pi=0$; purple); Ineffective attention check ($\pi=0.3$; teal); and Effective attention check ($\pi=0.8$; yellow). As shown in figure \ref{sim_excluded}, the mean pRMSE is just above 0.11 when no inattentive respondents are excluded (purple). Considering that we are trying to estimate an item with a prevalence of 0.166, this is very high. Excluding inattentive respondents can clearly be very beneficial under this setup. For instance, excluding 80\% of the inattentive respondents (yellow) lowers the pRMSE to near 0.06.
+
+![Simulation of pRMSE by exclusion of inattentive respondents \label{sim_excluded}](output/attention_checks_color.pdf){width=600px}
+
+Another option to reduce the variance and bias of the estimate of interest is to include a *placebo* item in the control list that guards against "mechanical inflation" as it equalizes the lists' length. Equalizing the lists thus removes the *bias* created by most forms of non-strategic respondent error.^[This is true for all types of non-strategic respondent error that are correlated with the length of the list.] We define a placebo item as an item that is added to the control list, but where the true population quantity is 0. Figure \ref{placebo_simulation} displays the results from a simulation (using the same setup as above) that compares the $pRMSE(\hat{\mu})$ of a sample with 30% inattentive respondents without including a placebo item (purple) and 30% inattentive respondents including a placebo item (yellow). For the inattentive respondents in the control group with the placebo item the responses were hence drawn from $U\{0,5\}$, instead of $U\{0,4\}$. It is clear that the inclusion of the placebo item can improve the precision of the estimate, even if no inattentive respondents are excluded. In our simulation the inclusion of the placebo item reduces the mean pRMSE from approximately 0.11 to 0.08. Again, given that we are trying to estimate an item with the prevalence of 0.16 this is a substantial improvement in precision.        
+
+![Simulation of pRMSE by adding a placebo item \label{placebo_simulation}](output/placebo_item_color.pdf){width=600px}
+
+
+For example, the following treatment item has the three features described above: *My zodiac animal is the Pig/[other animal]*. The suggested study will be fielded in Hong Kong, where respondents' knowledge of their zodiac animal is safe to assume. Each given year is associated with one animal of which there are 12 in total. The specific animal presented on the list is randomly drawn from a list of the 12 animals and piped into the question item. This done in order to guard against unequal distributions following idiosyncrasies of preferences for giving birth during the year of certain animals. Hence, agreement with the proposed item ($\mu$) will be one twelfth (8.33 percent) in expectation. The true population quantity of the item will thus be known (1). Since whether or not the item is true for a given respondent is random by construction, the proposed item will also have property (2) and (3).
+
+Our survey will feature some basic background questions followed by a list experiment with 4 control items, shown to the control group, and the same list of control items plus the treatment item (the zodiac animal) shown to the treatment group. We will use the experiment to estimate $\mu$ and to calculate the $pRMSE(\hat{\mu})$. Confidence intervals for $\hat{\mu}$ can be calculated using the studentized bootstrap method. We will first try two different attention checks to identify inattentive respondents. First, we will use a standard Instructional Manipulation Check (IMC), where respondents demonstrate that they are paying attention by following a precise set of instructions about which alternative to select at the end of a somewhat lengthy question (placed among the background questions) [@berinsky2014separating; @oppenheimer2009imc]. We also develop two Factual Manipulation Check (FMC) [@kane2019no] that is placed on the screen after the list experiments. The FMC will ask objective questions about the list that was shown to the respondent, like: "How many items were there on the list?" and "Which of these items were placed at the bottom of the list?". We are mindful to construct a FMC that is not correlated with the treatment itself (receiving the list with the item of interest) so as to minimize the risk for post-treatment bias of analyses that conditions on the FMC (see @aronow2019note). For example, if the control list includes a placebo item (see discussion below), "How many items were there on the list?" should be uncorrelated to the treatment.
+
+We can then use the IMC and the FMC to test different criteria for excluding inattentive respondents from the list experiment. We can compare different exclusion-criteria by calculating the $pRMSE(\hat{\mu})$ for each specific criterion. A basic simulation shows that excluding inattentive respondents from the list experiment can greatly reduce the variance and bias of the estimate of interest. The simulation assumes 3000 respondents, where 30\% of the respondents are "inattentive" (for instance, @alvarez2019paying estimates that 36\% of respondents in their experiment were "inattentive", and from an earlier application of the list experiments in a similar setting we estimate 28% of respondents to be inattentive [@robinson2019self]). The control list consists of 4 independent items, each drawn from a bernoulli distribution. The parameter $p$ was set to 0.5, 0.5, 0.15, and 0.85 for the different items respectively. The treatment list consisted of the same 4 items plus a treatment item, drawn from a bernoulli distribution with $p=0.0166$. 30\% of the total number of "respondents" were randomly assigned to be "inattentive". For inattentive respondents in the control group the outcome was replaced by a draw from a discrete uniform distribution, $U\{0,4\}$, and the outcome for the inattentive treatment group was replaced by a draw from $U\{0,5\}$ (see @blair2019list). A share of the inattentive respondents ($\pi$) was then randomly excluded from the experiment before analyzing the list experiment, emulating some respondents "getting caught" in one of the manipulation checks. Figure \ref{sim_excluded} shows the mean $pRMSE(\hat{\mu})$ based on 10000 simulated data sets (assuming the setup described above) for different $\pi$; No inatentives excluded ($\pi=0$; purple); Ineffective attention check ($\pi=0.3$; teal); and Effective attention check ($\pi=0.8$; yellow). As shown in figure \ref{sim_excluded}, the mean pRMSE is just above 0.11 when no inattentive respondents are excluded (purple). Considering that we are trying to estimate an item with a prevalence of 0.166, this is very high. Excluding inattentive respondents can clearly be very beneficial under this setup. For instance, excluding 80\% of the inattentive respondents (yellow) lowers the pRMSE to near 0.06.
+
+![Simulation of pRMSE by exclusion of inattentive respondents \label{sim_excluded}](output/attention_checks_color.pdf){width=600px}
+
+We also want to explore the possibility of *improving* respondent attentiveness in list experiments. A simple intervention explored by @clifford2015attempts is to provide a "warning message" to the respondents. This is a short message stating that responses are carefully checked and that only responses from participants that demonstrate that they have read and understood the survey will be used. The respondents also have to indicate that they have understood the instructions. The authors find that respondents given this message (referred to as "audit" in the study) are substantially more attentive than respondents in the control group who received no message.^[The authors try several different warning messages but find the "audit" message to be the most effective.] We will evaluate the effectiveness of the audit message by comparing the respondents who have (randomly) received the message with those who have not with regards to their pRMSE; time spent on the each list; and the propensity to pass the FMC:s.   
+
+
+Another option to reduce the variance and bias of the estimate of interest is to include a *placebo* item in the control list that guard against mechanical inflation as it equalizes the lists' length. Equalizing the lists thus removes the *bias* created by most forms of non-strategic respondent error. This placebo item should be an item for which the true population quantity is known to be 0 (or very close to 0). A placebo item with a true value of 0 will have the previously discussed properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics. This could be achieved by piping in an item that is *plausible* for all respondents, yet *necessarily false* for any one given respondent. For example, respondents indicate that they are below 30 years of age get the statement "I was born in the 70s", and respondents who indicate that they are 30 or above get the placebo statement "I was born in the 2000s". The inclusion of a placebo item is a non-costly design feature that can substantially reduce the variance and bias of the estimate. Figure \ref{placebo_simulation} displays the results from a simulation (using the same setup as above) that compares the $pRMSE(\hat{\mu})$ of a sample with 30% inattentive respondents without including a placebo statement (purple) and 30% inattentive respondents including a placebo item (yellow). For the inattentive respondents in the control group with the placebo item the responses were hence drawn from $U\{0,5\}$, instead of $U\{0,4\}$. It is clear that the inclusion of the placebo item can improve the precision of the estimate, even if no inattentive respondents are excluded. In our simulation the inclusion of the placebo item reduces the mean pRMSE from approximately 0.11 to 0.08. Again, given that we are trying to estimate an item with the prevalence of 0.16 this is a substantial improvement in precision.        
+
+![Simulation of pRMSE by adding a placebo item \label{placebo_simulation}](output/placebo_item_color.pdf){width=600px}
+
+
+
+
+# Research design
+
+The basic research design consists of a set of two list experiments for which the items of interest (the "sensitive" item) has three specific properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics. We then compare different design-based solutions to minimize respondent error by estimating the root mean squared error for the prediction (pRMSE) of the item of interest under different conditions, described in detail below.
+
+Both list experiments consist of a set of four control items, the order in which they appear on the list is randomized (see full survey in appendix for details). Following best practice two of the items on each list are negatively correlated.^[The combination of control items on both lists have previously been used in a similar context and does appear to work well to avoid ceiling and floor effects (see @robinson2019self).] The control lists are randomly given to half of the respondents.
+
+For the first list experiment (A) the other half receives the treatment list, which consist of one additional, "sensitive" item. This item should have the three features described above. In the first list we will use a statement regarding ones zodiac animal, for example *I was born in the year of the Dog or in the year of the Pig.* as the "sensitive" item. Thestudy will be fielded in Hong Kong, where respondents' knowledge of their zodiac animal is safe to assume. Each given year is associated with one animal of which there are 12 in total. The specific combination animal presented on the list is randomly drawn from a list of 6 different combinations and is piped into the question item (see full survey in the appendix for the 6 zodiac statements). This done in order to guard against unequal distributions following idiosyncrasies of preferences for giving birth during the year of certain animals. Hence, agreement with the proposed item ($\mu$) will be two twelfths (16.66 percent) in expectation. The true population quantity of the item will thus be known (1). Since whether or not the item is true for a given respondent is random by construction, the proposed item will also have property (2) and (3).
+
+In the second list experiment we employ respondents birth-timing within the year to construct a "sensitive" item with the three desired properties. The respondents who are assigned the treatment list will receive a statement of being born in one of the four seasons, for example, *I was born in Winter (Dec/Jan/Feb)*. The statement is randomly drawn from the four seasons and piped into the list. Agreement with the proposed statement ($\mu$) will therefore be one quarter (25 percent) in expectation. Again the the population quantity is therefore known (1), and given that the specific birth-season is presented at random, the item will be uncorrelated to all the control items on the list (2), as well as any respondent characteristics. We can then use the
+
+## Dealing with inattentive respondents
+
+### Instructional Manipulation Check (IMC) - pre-treatment
+
+### Factual Manipulation Check (FMC) - post-treatment
+
+## Improving attentiveness of respondents - audit check
+In order to improve the attentiveness of respondents we  
+
+The complete message in @clifford2015attempts reads: "We check responses carefully in order to make sure that people have read the instructions for the task and responded carefully. We will only accept participants who clearly demonstrate that they have read and understood the survey. Again, there will be some very simple questions in what follows that test whether you are reading the instructions. If you get these wrong, we may not be able to use your data. Do you understand?" with answer alternatives "Yes, I understand"; "No, I do not understand".
+
+The message will be randomly shown to half of the respondents at just before the list experiments. We can analyze the effectiveness of the warning message in different ways. First, we can compare the $pRMSE(\hat{\mu})$ in the two list experiments between the treatment group (that received the message) and the control group. This analysis requires many respondents (probably over 3000) to have sufficient power, given that we are splitting the sample in half when comparing the two groups (since we analyze the list separately for the two groups). We will also estimate the effectiveness of the message using more "indirect" measures. We can for instance measure how much time the different groups take to complete the list experiments and what fraction of respondents in each group that passes the IMC and the FCM. This will give an overall indication of whether the message plausibly increases the attention respondents pay to the list experiments.
+
+
+## Reducing bias introduced by inattentive respondents - placebo statement
+Another option to reduce the variance and bias of the estimate of interest is to include a *placebo* item in the control list that guard against mechanical inflation as it equalizes the lists' length. Equalizing the lists thus removes the *bias* created by most forms of non-strategic respondent error. This placebo item should be an item for which the true population quantity is known to be 0 (or very close to 0). A placebo item with a true value of 0 will have the aforementioned properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics.
+For example, in the Singaporean setting @riambau2019placebo use "I have been invited to have dinner with PM Lee at Sri Temasek [the Prime Minister of Singapore's residence] next week.", which they suggest is "plausible but false" for all respondents. We argue that there is a benefit to having an placebo item that is *truly* plausible because it does not risk compromise the perceived seriousness of the survey. Using an item that is necessary true or necessary false due to implausibility risks signaling to the respondent that their responses are not important or valuable to the researchers, which possibly result in lower attentiveness. Instead we propose to include an that is *plausible* for all respondents, yet *necessarily false* for any one given respondent. For example, in web-adminstrated or tablet administrated surveys it is possible to pipe in a plaacebo item utilizing infomrmation gain earlier in the survey. We will give survey respondents who indicate that they are below 30 years of age the statement "I was born in the 70s", and respondents who indicate that they are 30 or above get the placebo statement "I was born in the 2000s". To the best of our knowledge this approach to assigning a placebo item is a novel inovation. 
+
+We will test the effect of the inclusion of a placebo item by randomly assigning a fifth placebo item to half of the respondents in the control group. This will be done in the second list experiment, included in the survey. The second experiment will be designed according to the same principles as the first, with a "sensitive" item that has properties (1), (2), and (3). We can then compare the $pRMSE(\hat{\mu})$ when the quantity is estimated using control group 1 (with the placebo item) to the estimates when using control group 2 (no placebo item) instead.
+
+
+# Expectations
+
+Our guiding premise is that excluding inatentives based on the criteria of failing either the IMC, the FMC and/or the audit check will reduce the $pRMSE(\hat{\mu})$. As regards how much, or which is one that is most effective, we take an exploratory approach in this study. Based on the simulations in Figure \ref{placebo_simulation} we also expect the inclusion of a to reduce the $pRMSE(\hat{\mu})$. Table \ref{full-survey} lists all tests we propose do in order to evaluate the different methods of reducing respondent error in list experiments.
+
+
+Typ såhär med mean pRMSE från 10000 simuleringar:
+
+```{r, echo=FALSE, warning=FALSE, message = FALSE}
+
+# kör code/simulations/simulations_build-up.R om vi vill ändra parametrar. sparat data från 10 000 simuleringar
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(reshape2)
+
+rio::import("data/simulation_data_buildup.csv") %>%
+  melt() %>%
+  group_by(variable) %>%
+  summarise(mean_value = mean(value, na.rm = TRUE)) %>%
+  kable()
+
+rio::import("data/simulation_data_buildup.csv") %>%
+  melt() %>%
+  group_by(variable) %>%
+  mutate(mean_value = mean(value, na.rm=TRUE)) %>%
+  ggplot(aes(value, colour = variable, fill = variable)) +
+  theme_minimal() +
+  geom_density(alpha = 0.5) +
+  geom_vline(aes(xintercept = mean_value, linetype = variable, colour = variable)) +
+  scale_fill_viridis_d() +
+  scale_color_viridis_d() +
+  xlim(0,0.25) +
+  labs(x="pRMSE", y="Density", fill="", colour="", linetype = "",
+       title = "Potential design improvements") +
+  NULL
+
+
+```
+
+\newpage
+
+## Dubbelt upp
+
+
+For example, the following treatment item has the three features described above: *My zodiac animal is the Pig/[other animal]*. The suggested study will be fielded in Hong Kong, where respondents' knowledge of their zodiac animal is safe to assume. Each given year is associated with one animal of which there are 12 in total. The specific animal presented on the list is randomly drawn from a list of the 12 animals and piped into the question item. This done in order to guard against unequal distributions following idiosyncrasies of preferences for giving birth during the year of certain animals. Hence, agreement with the proposed item ($\mu$) will be one twelfth (8.33 percent) in expectation. The true population quantity of the item will thus be known (1). Since whether or not the item is true for a given respondent is random by construction, the proposed item will also have property (2) and (3).
+
+Our survey will feature some basic background questions followed by a list experiment with 4 control items, shown to the control group, and the same list of control items plus the treatment item (the zodiac animal) shown to the treatment group. We will use the experiment to estimate $\mu$ and to calculate the $pRMSE(\hat{\mu})$. Confidence intervals for $\hat{\mu}$ can be calculated using the studentized bootstrap method. We will first try two different attention checks to identify inattentive respondents. First, we will use a standard Instructional Manipulation Check (IMC), where respondents demonstrate that they are paying attention by following a precise set of instructions about which alternative to select at the end of a somewhat lengthy question (placed among the background questions) [@berinsky2014separating; @oppenheimer2009imc]. We also develop two Factual Manipulation Check (FMC) [@kane2019no] that is placed on the screen after the list experiments. The FMC will ask objective questions about the list that was shown to the respondent, like: "How many items were there on the list?" and "Which of these items were placed at the bottom of the list?". We are mindful to construct a FMC that is not correlated with the treatment itself (receiving the list with the item of interest) so as to minimize the risk for post-treatment bias of analyses that conditions on the FMC (see @aronow2019note). For example, if the control list includes a placebo item (see discussion below), "How many items were there on the list?" should be uncorrelated to the treatment.
+
+We can then use the IMC and the FMC to test different criteria for excluding inattentive respondents from the list experiment. We can compare different exclusion-criteria by calculating the $pRMSE(\hat{\mu})$ for each specific criterion. A basic simulation shows that excluding inattentive respondents from the list experiment can greatly reduce the variance and bias of the estimate of interest. The simulation assumes 3000 respondents, where 30\% of the respondents are "inattentive" (for instance, @alvarez2019paying estimates that 36\% of respondents in their experiment were "inattentive", and from an earlier application of the list experiments in a similar setting we estimate 28% of respondents to be inattentive [@robinson2019self]). The control list consists of 4 independent items, each drawn from a bernoulli distribution. The parameter $p$ was set to 0.5, 0.5, 0.15, and 0.85 for the different items respectively. The treatment list consisted of the same 4 items plus a treatment item, drawn from a bernoulli distribution with $p=0.0166$. 30\% of the total number of "respondents" were randomly assigned to be "inattentive". For inattentive respondents in the control group the outcome was replaced by a draw from a discrete uniform distribution, $U\{0,4\}$, and the outcome for the inattentive treatment group was replaced by a draw from $U\{0,5\}$ (see @blair2019list). A share of the inattentive respondents ($\pi$) was then randomly excluded from the experiment before analyzing the list experiment, emulating some respondents "getting caught" in one of the manipulation checks. Figure \ref{sim_excluded} shows the mean $pRMSE(\hat{\mu})$ based on 10000 simulated data sets (assuming the setup described above) for different $\pi$; No inatentives excluded ($\pi=0$; purple); Ineffective attention check ($\pi=0.3$; teal); and Effective attention check ($\pi=0.8$; yellow). As shown in figure \ref{sim_excluded}, the mean pRMSE is just above 0.11 when no inattentive respondents are excluded (purple). Considering that we are trying to estimate an item with a prevalence of 0.166, this is very high. Excluding inattentive respondents can clearly be very beneficial under this setup. For instance, excluding 80\% of the inattentive respondents (yellow) lowers the pRMSE to near 0.06.
+
+![Simulation of pRMSE by exclusion of inattentive respondents \label{sim_excluded}](output/attention_checks_color.pdf){width=600px}
+
+We also want to explore the possibility of *improving* respondent attentiveness in list experiments. A simple intervention explored by @clifford2015attempts is to provide a "warning message" to the respondents. This is a short message stating that responses are carefully checked and that only responses from participants that demonstrate that they have read and understood the survey will be used. The respondents also have to indicate that they have understood the instructions. The authors find that respondents given this message (referred to as "audit" in the study) are substantially more attentive than respondents in the control group who received no message.^[The authors try several different warning messages but find the "audit" message to be the most effective.] We will evaluate the effectiveness of the audit message by comparing the respondents who have (randomly) received the message with those who have not with regards to their pRMSE; time spent on the each list; and the propensity to pass the FMC:s.   
+
+
+Another option to reduce the variance and bias of the estimate of interest is to include a *placebo* item in the control list that guard against mechanical inflation as it equalizes the lists' length. Equalizing the lists thus removes the *bias* created by most forms of non-strategic respondent error. This placebo item should be an item for which the true population quantity is known to be 0 (or very close to 0). A placebo item with a true value of 0 will have the previously discussed properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics. This could be achieved by piping in an item that is *plausible* for all respondents, yet *necessarily false* for any one given respondent. For example, respondents indicate that they are below 30 years of age get the statement "I was born in the 70s", and respondents who indicate that they are 30 or above get the placebo statement "I was born in the 2000s". The inclusion of a placebo item is a non-costly design feature that can substantially reduce the variance and bias of the estimate. Figure \ref{placebo_simulation} displays the results from a simulation (using the same setup as above) that compares the $pRMSE(\hat{\mu})$ of a sample with 30% inattentive respondents without including a placebo statement (purple) and 30% inattentive respondents including a placebo item (yellow). For the inattentive respondents in the control group with the placebo item the responses were hence drawn from $U\{0,5\}$, instead of $U\{0,4\}$. It is clear that the inclusion of the placebo item can improve the precision of the estimate, even if no inattentive respondents are excluded. In our simulation the inclusion of the placebo item reduces the mean pRMSE from approximately 0.11 to 0.08. Again, given that we are trying to estimate an item with the prevalence of 0.16 this is a substantial improvement in precision.        
+
+![Simulation of pRMSE by adding a placebo item \label{placebo_simulation}](output/placebo_item_color.pdf){width=600px}
+
+
+
+
+# Research design
+
+The basic research design consists of a set of two list experiments for which the items of interest (the "sensitive" item) has three specific properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics. We then compare different design-based solutions to minimize respondent error by estimating the root mean squared error for the prediction (pRMSE) of the item of interest under different conditions, described in detail below.
+
+Both list experiments consist of a set of four control items, the order in which they appear on the list is randomized (see full survey in appendix for details). Following best practice two of the items on each list are negatively correlated.^[The combination of control items on both lists have previously been used in a similar context and does appear to work well to avoid ceiling and floor effects (see @robinson2019self).] The control lists are randomly given to half of the respondents.
+
+For the first list experiment (A) the other half receives the treatment list, which consist of one additional, "sensitive" item. This item should have the three features described above. In the first list we will use a statement regarding ones zodiac animal, for example *I was born in the year of the Dog or in the year of the Pig.* as the "sensitive" item. Thestudy will be fielded in Hong Kong, where respondents' knowledge of their zodiac animal is safe to assume. Each given year is associated with one animal of which there are 12 in total. The specific combination animal presented on the list is randomly drawn from a list of 6 different combinations and is piped into the question item (see full survey in the appendix for the 6 zodiac statements). This done in order to guard against unequal distributions following idiosyncrasies of preferences for giving birth during the year of certain animals. Hence, agreement with the proposed item ($\mu$) will be two twelfths (16.66 percent) in expectation. The true population quantity of the item will thus be known (1). Since whether or not the item is true for a given respondent is random by construction, the proposed item will also have property (2) and (3).
+
+In the second list experiment we employ respondents birth-timing within the year to construct a "sensitive" item with the three desired properties. The respondents who are assigned the treatment list will receive a statement of being born in one of the four seasons, for example, *I was born in Winter (Dec/Jan/Feb)*. The statement is randomly drawn from the four seasons and piped into the list. Agreement with the proposed statement ($\mu$) will therefore be one quarter (25 percent) in expectation. Again the the population quantity is therefore known (1), and given that the specific birth-season is presented at random, the item will be uncorrelated to all the control items on the list (2), as well as any respondent characteristics. We can then use the
+
+## Dealing with inattentive respondents
+
+### Instructional Manipulation Check (IMC) - pre-treatment
+
+### Factual Manipulation Check (FMC) - post-treatment
+
+## Improving attentiveness of respondents - audit check
+In order to improve the attentiveness of respondents we  
+
+The complete message in @clifford2015attempts reads: "We check responses carefully in order to make sure that people have read the instructions for the task and responded carefully. We will only accept participants who clearly demonstrate that they have read and understood the survey. Again, there will be some very simple questions in what follows that test whether you are reading the instructions. If you get these wrong, we may not be able to use your data. Do you understand?" with answer alternatives "Yes, I understand"; "No, I do not understand".
+
+The message will be randomly shown to half of the respondents at just before the list experiments. We can analyze the effectiveness of the warning message in different ways. First, we can compare the $pRMSE(\hat{\mu})$ in the two list experiments between the treatment group (that received the message) and the control group. This analysis requires many respondents (probably over 3000) to have sufficient power, given that we are splitting the sample in half when comparing the two groups (since we analyze the list separately for the two groups). We will also estimate the effectiveness of the message using more "indirect" measures. We can for instance measure how much time the different groups take to complete the list experiments and what fraction of respondents in each group that passes the IMC and the FCM. This will give an overall indication of whether the message plausibly increases the attention respondents pay to the list experiments.
+
+
+## Reducing bias introduced by inattentive respondents - placebo statement
+Another option to reduce the variance and bias of the estimate of interest is to include a *placebo* item in the control list that guard against mechanical inflation as it equalizes the lists' length. Equalizing the lists thus removes the *bias* created by most forms of non-strategic respondent error. This placebo item should be an item for which the true population quantity is known to be 0 (or very close to 0). A placebo item with a true value of 0 will have the aforementioned properties: (1) the true quantity of the item is known, (2) the item is uncorrelated with all items on the control list, (3) the item is uncorrelated to all (observed and unobserved) respondent characteristics.
+For example, in the Singaporean setting @riambau2019placebo use "I have been invited to have dinner with PM Lee at Sri Temasek [the Prime Minister of Singapore's residence] next week.", which they suggest is "plausible but false" for all respondents. We argue that there is a benefit to having an placebo item that is *truly* plausible because it does not risk compromise the perceived seriousness of the survey. Using an item that is necessary true or necessary false due to implausibility risks signaling to the respondent that their responses are not important or valuable to the researchers, which possibly result in lower attentiveness. Instead we propose to include an that is *plausible* for all respondents, yet *necessarily false* for any one given respondent. For example, in web-adminstrated or tablet administrated surveys it is possible to pipe in a plaacebo item utilizing infomrmation gain earlier in the survey. We will give survey respondents who indicate that they are below 30 years of agethe statement "I was born in the 70s", and respondents who indicate that they are 30 or above get the placebo statement "I was born in the 2000s". To the best of our knowlege this approach to assigning a placebo item is a novel inovation.
+
+We will test the effect of the inclusion of a placebo item by randomly assigning a fifth placebo item to half of the respondents in the control group. This will be done in the second list experiment, included in the survey. The second experiment will be designed according to the same principles as the first, with a "sensitive" item that has properties (1), (2), and (3). We can then compare the $pRMSE(\hat{\mu})$ when the quantity is estimated using control group 1 (with the placebo item) to the estimates when using control group 2 (no placebo item) instead.
+
+
+
+\newpage
+
+## References
+
+<div id="refs"></div>
+
+\newpage
+
+## Appendix
+
+### Simulations with varying different list length
+
+![Simulation of pRMSE by exclusion of inattentive respondents with control list including 3 and 4 items  \label{attention_checks_3vs4}](output/attention_checks_3vs4.pdf){width=600px}
+
+![Simulation of pRMSE by adding a placebo item with control list including 3 and 4 items  \label{placebo_simulation_3vs4}](output/placebo_item_3vs4.pdf){width=600px}
+
+\newpage
+
+### Full survey
+```{r, echo=FALSE, warning=FALSE, message = FALSE}
+
+# kör code/get_survey.R för att uppdatera med den senaste versionen från qualtrics!
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+rio::import("data/question_wording.csv") %>%
+  kable("latex", booktabs = TRUE, longtable = TRUE, caption = "Does this work? \\label{full-survey} ") %>%
+  kable_styling(full_width = TRUE, latex_options = c("hold_position")) %>%
+  column_spec(1, bold = T, border_right = T, width = "10em") %>%
+  column_spec(2, width = "35em")
+
+
+```
+ \newpage
+
+
+
+Typ 10000 simuleringar:
+
+```{r, echo=FALSE, warning=FALSE, message = FALSE}
+
+# r code/simulations/simulations_build-up.R om vi vill ndra parametrar. sparat data frn 10 000 simuleringar
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(reshape2)
+
+rio::import("data/simulation_data_buildup.csv") %>%
+  melt() %>%
+  group_by(variable) %>%
+  summarise(mean_value = mean(value, na.rm = TRUE)) %>%
+  kable()
+
+rio::import("data/simulation_data_buildup.csv") %>%
+  melt() %>%
+  group_by(variable) %>%
+  mutate(mean_value = mean(value, na.rm=TRUE)) %>%
+  ggplot(aes(value, colour = variable, fill = variable)) +
+  theme_minimal() +
+  geom_density(alpha = 0.5) +
+  geom_vline(aes(xintercept = mean_value, linetype = variable, colour = variable)) +
+  scale_fill_viridis_d() +
+  scale_color_viridis_d() +
+  xlim(0,0.25) +
+  labs(x="pRMSE", y="Density", fill="", colour="", linetype = "",
+       title = "Potential design improvements") +
+  NULL
+
+
+```
+
+
+\newpage
+
+## References
+
+<div id="refs"></div>
+
+\newpage
+
+## Appendix
+
+### Simulations with control list of 3 and 4 items
+
+![Simulation of pRMSE by exclusion of inattentive respondents with control list including 3 and 4 items  \label{attention_checks_3vs4}](output/attention_checks_3vs4.pdf){width=600px}
+
+![Simulation of pRMSE by adding a placebo item with control list including 3 and 4 items  \label{placebo_simulation_3vs4}](output/placebo_item_3vs4.pdf){width=600px}
+
+\newpage
+
+### Full survey
+```{r, echo=FALSE, warning=FALSE, message = FALSE}
+
+# kr code/get_survey.R r att uppdatera med den senaste versionen frn qualtrics!
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+rio::import("data/question_wording.csv") %>%
+  kable("latex", booktabs = TRUE, longtable = TRUE, caption = "Does this work? \\label{full-survey} ") %>%
+  kable_styling(full_width = TRUE, latex_options = c("hold_position")) %>%
+  column_spec(1, bold = T, border_right = T, width = "10em") %>%
+  column_spec(2, width = "35em")
