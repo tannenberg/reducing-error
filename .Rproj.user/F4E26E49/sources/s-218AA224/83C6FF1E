@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "4265218462",
+    "hash" : "0",
     "id" : "83C6FF1E",
-    "lastKnownWriteTime" : 1572849696,
-    "last_content_update" : 1572849696371,
+    "lastKnownWriteTime" : 1572896605,
+    "last_content_update" : 1572896605784,
     "path" : "~/reducing-error/pre-analysis-plan.Rmd",
     "project_path" : "pre-analysis-plan.Rmd",
     "properties" : {
-        "cursorPosition" : "268,0",
-        "scrollLine" : "267"
+        "cursorPosition" : "85,1677",
+        "scrollLine" : "86"
     },
     "read_only" : false,
     "read_only_alternatives" : [

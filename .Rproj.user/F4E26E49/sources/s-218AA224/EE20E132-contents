@@ -12,7 +12,7 @@ surveys
 #we want data from the 5th one in the list (at least among my list of surveys)
 df <- fetch_survey(surveys$id[5], convert = FALSE, force_request = TRUE)
 names(df)
-df <- df[456:541,]
+df <- df[341:541,]
 
 #lets clean and mutate the variables
 df <- df %>% 
