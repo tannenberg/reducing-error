@@ -10,7 +10,7 @@ surveys <- all_surveys()
 surveys
 
 #we want data from the 5th one in the list (at least among my list of surveys)
-df <- fetch_survey(surveys$id[5], convert = FALSE, force_request = TRUE)
+df <- fetch_survey(surveys$id[4], convert = FALSE, force_request = TRUE)
 names(df)
 df <- df[341:541,]
 
@@ -60,7 +60,7 @@ df <- df %>%
 write_csv(df, "data/survey-data.csv")
 
 # lets get the survey questions
-questions <- survey_questions(surveys$id[5])
+questions <- survey_questions(surveys$id[7])
 questions
 
 # need to clean away html-junk...
@@ -73,7 +73,9 @@ clean_html <- function(x) {
 questions <- questions %>% 
   mutate(Wording = clean_html(question), 
          Tag = clean_html(qname)) %>%
-  select(Tag, Wording)
+  select(Tag, Wording) %>% 
+  distinct(Tag, .keep_all = TRUE)
+
 
 # save as csv to be called from pap2.Rmd
 write_csv(questions, "data/question_wording.csv")

@@ -7,13 +7,13 @@
     "folds" : "",
     "hash" : "0",
     "id" : "EE20E132",
-    "lastKnownWriteTime" : 1572894569,
-    "last_content_update" : 1572894569,
+    "lastKnownWriteTime" : 1572913193,
+    "last_content_update" : 1572913193877,
     "path" : "~/reducing-error/code/get_survey.R",
     "project_path" : "code/get_survey.R",
     "properties" : {
-        "cursorPosition" : "59,37",
-        "scrollLine" : "0"
+        "cursorPosition" : "81,0",
+        "scrollLine" : "63"
     },
     "read_only" : false,
     "read_only_alternatives" : [

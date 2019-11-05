@@ -12,7 +12,6 @@ header-includes:
     - \usepackage{bbm}
     - \doublespacing
     - \usepackage[utf8]{inputenc}
-    - \usepackage{CJKutf8} 
 ---
 
 # Abstract
@@ -89,9 +88,13 @@ The study will also include three additional list experiments, C, D, and E appli
 We evaluate four different strategies to improve the average respondent attentiveness in the sample: the IMC, the FMC, the inclusion of a placebo item, and a warning message. The specific questions and manipulations we use are described below.
 
 ### Instructional Manipulation Check (IMC)
-First we will use standard Instructional Manipulation Checks (IMC) to identify inattentive respondents. All respondents will receive two IMCs adopted from @berinsky2014separating and @berinsky2019using, one "multiple choice screener" and one "grid screener". These are minimally modified to suit our survey mode (see appendix for full question wording). The first IMC requires respondents to demonstrate that they are paying attention by following a precise set of instructions about which alternative or action to select at the end of a somewhat lengthy question (placed among the background questions) [@berinsky2014separating; @oppenheimer2009imc]. In second IMC (the grid screener) the respondent is asked "In the grid below you will see a series of statements. please tell us whether you agree or disagree with each statement." The grid contain seven statements in total out of which five are sincere attitudinal statements. The remaining two probe for attentiveness and read: "Please click the "neither agree nor disagree" response" and "Two is greater than one", which both have a single correct answer. The order of the seven statements is randomized.
+First we will use standard Instructional Manipulation Checks (IMC) to identify inattentive respondents. All respondents will receive two IMCs adopted from @berinsky2014separating and @berinsky2019using, one "multiple choice screener" and one "grid screener". These are minimally modified to suit our survey mode (see appendix for full question wording). The first IMC requires respondents to demonstrate that they are paying attention by following a precise set of instructions about which two alternatives to select at the end of a somewhat lengthy question (placed among the background questions) [@berinsky2014separating; @oppenheimer2009imc]. In the second IMC (the grid screener) the respondent is asked "In the grid below you will see a series of statements. please tell us whether you agree or disagree with each statement." The grid contain seven statements in total out of which five are sincere attitudinal statements. The remaining two probe for attentiveness and read: "Please click the "neither agree nor disagree" response" and "China's national flag is mostly green", which both have a single correct answer (the flag is mostly red). The order of the seven statements is randomized.    
 
-We treat respondents who fail either one of the IMCs as inattentive. Note that for passing the second IMC respondents have to pass both screener statements in the grid. Excluding inattentives who fail IMCs placed *before* the list experiment will not introduce post-treatment bias. It may however affect the representativeness of the overall sample, which we will explore in the paper.
+Using the IMCs we define attentive/innatentive respondents in two sepperate ways: one demanding reasonable attention and another demanding close attention. First, we will treat respondents who pass the grid IMC as *attentive* Note that for passing respondents have to pass both screener statements in the grid. This demand respondents to, at least, pay attention to the imidiate question they are answering. Fully innatentive respondents are unlikely to pass. Respondents who are choosing completely at random only have a 4 percent chance of passing both of these ($(^1/_5) * (^1/_5)$), and the setup guarantees that respondent who *straightline* will be cought by either the first or second screener statement in the second IMC since the true answer is not the same for both statements. 
+
+Second we define *very attentive* respondents as those who pass both the grid IMC and the mulitple choice IMC. The multiple choice IMC is considerably more demanding as it recuires respondents to not only pay attention to the imidiate question but rather to the full instructional text preceeding the question. 
+
+Excluding inattentives who fail IMCs placed *before* the list experiment will not introduce post-treatment bias. It may however affect the representativeness of the overall sample, which we will explore in the paper.
 
 ### Factual Manipulation Check (FMC)
 We also consider a second type of manipulation check that instead asks objective questions about key elements in the experiment. This type of manipulation check, referred to as a factual manipulation check (FMC), thus aims to identify individual attentiveness to experimental information directly [@kane2019no]. We develop a FMC specifically tailored to the list experiment and are mindful to construct one that is not correlated with the treatment itself (receiving the list with the item of interest) so as to minimize the risk for post-treatment bias of analyses that conditions on the FMC (see @aronow2019note). The FMC reads:
@@ -266,3 +269,19 @@ List effect bias implies that respondents given the longer list adjust their res
 
 To roughly estimate the power of our test to detect list effect bias (see above) we run the following simulation. We assume 4000 respondents. We assume that $s=0.25$ and therefore exclude 1000 "inattentive" respondents from the sample, leaving 3000 respondents (hence around 1000 respondents in each group). We set  $j_{low}$ to 3 and $p_{l}$ to $0.1$, indicating that respondents given the placebo list who would answer below 3 have a probability of 0.1 to adjust their answer upwards by one item. Under this setup the test comparing the difference between the two control lists (using the DiM estimator) has a 75\% chance to reject the null hypothesis. Using the same simulation setup and a sensitive item with a prevalence of $\frac{1}{6}$ for the treatment group, we estimate that the chance that the $pRMSE(\hat{\tau})$ will be lower when estimating $\tau$ using the placebo control group as compared to the normal control group is 93\%.
 
+\newpage
+
+# Full survey
+```{r, echo=FALSE, warning=FALSE, message = FALSE}
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+rio::import("data/question_wording.csv") %>%
+  kable("latex", booktabs = TRUE, longtable = TRUE, caption = "") %>%
+  kable_styling(full_width = TRUE, latex_options = c("hold_position")) %>%
+  column_spec(1, bold = T, border_right = T, width = "10em") %>%
+  column_spec(2, width = "35em")
+
+```
