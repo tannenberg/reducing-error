@@ -60,7 +60,7 @@ df <- df %>%
 write_csv(df, "data/survey-data.csv")
 
 # lets get the survey questions
-questions <- survey_questions(surveys$id[7])
+questions <- survey_questions(surveys$id[7]) #to get the english version
 questions
 
 # need to clean away html-junk...

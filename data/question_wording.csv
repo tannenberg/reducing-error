@@ -3,12 +3,12 @@ intro,Thank you for your participation! This is a social science survey overseen
 age,How old are you?
 gender,Are you a man or a woman?
 hukou,What is your current hukuo status?
-IMC_1,"In order to show that you have read all the questions carefully, please ignore your personal preferences and choose ""Red"" and ""Green"" below. You don't have to think about the question below, please just select these two colors directly.What is your favorite color? "
+IMC_1,"In order to show that you have read this question carefully, please ignore your personal preferences and choose ""Red"" and ""Green"" below. Please don't think about the following questions, just choose these two colors directly.What is your favorite color? "
 income,What is your annual income in Chinese Yuan?
 education,What is you highest level of education (including currently enrolled)?
 work,"What type
 of organization do you work for?"
-Q179,What is your political affiliation?
+party,What is your political affiliation?
 imc_2_intro,"In the grid below, you will see a series of statements. Please tell us whether you agree or disagree with each statement."
 imc_2_1,"Please click the ""Neither agree nor disagree"" response"
 imc_2_2,China's national flag is mostly green
