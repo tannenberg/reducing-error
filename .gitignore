@@ -15,3 +15,5 @@ china_survey.csv
 *.Rhistory
 
 .Rproj.user
+
+.Rhistory
