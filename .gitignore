@@ -10,5 +10,8 @@ survey-data.csv
 
 pilot_1-data.csv
 
+china_survey.csv
+
 *.Rhistory
 
+.Rproj.user

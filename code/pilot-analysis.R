@@ -9,23 +9,21 @@ library(sf)
 
 #get data and filter out test generated data (those without an ip-number)
 df <- import("data/survey-data.csv")# %>% 
-#  filter(!is.na(IPAddress)) %>% 
- # tail(113L)
 
 ###
 #Attentiveness checks (1 = PASS, 0 = FAIL)
 ###
 
 #How many pass the imc/s?
-#imc_1 (click next), imc_2_1 (chose middle option), imc_2_2 (two greater than one)
 
-df %>% select(imc_1, imc_2_1, imc_2_2, imc_2_2_inc_somewhat) %>% 
+df %>% select(imc_1_pass, imc_2_1_pass, imc_2_2_pass) %>% 
   gather() %>% 
   group_by(key, value) %>% 
   summarise(N=n())
 
 #how many are attentive in our sample?
-df %>% group_by(attentive_imc) %>% summarise(N=n())
+df %>% group_by(very_attentive) %>% summarise(N=n())
+
 
 ###
 #How many pass the FMC/s?
@@ -43,22 +41,29 @@ df %>% select(fmc_a:fmc_e) %>%
 #How much time do respondents spend on the survey? in minutes
 df %>% 
   ggplot(aes(x=time_spent/60)) +
-  geom_density()
+  geom_density() +
+  xlim(0, 20) +
+  NULL
 
 # How about difference between attentive and innatentive?
 # lets look at this using different attention filters
 
 df %>% 
-  ggplot(aes(x=time_spent/60, fill = as.factor(imc_2_2_inc_somewhat))) +
+  filter(time_spent < 1800) %>% 
+  filter(!is.na(very_attentive)) %>% 
+  ggplot(aes(x=time_spent/60, fill = as.factor(very_attentive))) +
   geom_density(alpha= .5) +
-  scale_fill_viridis_d()
+  scale_fill_viridis_d() +
+  xlim(0, 20) +
+  NULL 
+  
 
 
 
 # whats the correlation structure between all our attentiveness meassures?
 df %>% 
-  select(imc_1, imc_2_1, imc_2_2_inc_somewhat, imc_2_2, fmc_a:fmc_e) %>% 
-  cor() %>% 
+  select(attentive, very_attentive, imc_1_pass, imc_2_1_pass, imc_2_2_pass, fmc_a:fmc_e) %>% 
+  cor(use = "complete.obs")%>% 
   corrplot::corrplot(., 
                    tl.col = "black", 
                    tl.cex = 0.75,
@@ -78,11 +83,12 @@ length(unique(df$IPAddress, na.rm=TRUE))
 # Where are ppl at?
 ###
 map <- df %>% 
+  filter(!is.na(lng)) %>% 
   st_as_sf(coords = c("lng", "lat")) 
 
 st_crs(map) <- st_crs(4326) #sets projection
 
-mapview::mapview(map)
+mapview::mapview(map %>% filter(using=="yes"))
 
 ###
 # LIST DESIGN
@@ -102,20 +108,13 @@ select(a_control:e_treatment) %>%
 #lets see if its better when we drop innatentives:
 
 df %>% 
-filter(imc_2_1 == 1) %>% 
+filter(very_attentive == 1) %>% 
 select(a_control:e_treatment) %>% 
   gather() %>% 
   ggplot(aes(x=value)) +
   geom_histogram(stat="count") +
   facet_wrap(~key)
 
-df %>% 
-  filter(imc_2_1 == 0) %>% 
-  select(a_control:e_treatment) %>% 
-  gather() %>% 
-  ggplot(aes(x=value)) +
-  geom_histogram() +
-  facet_wrap(~key)
 
 ###
 # Simple DIM:s
@@ -140,7 +139,7 @@ df %>%
   
 # and are we better at it dropping inattentives?
 df %>% 
-  filter(imc_2_1 == 1) %>% 
+  filter(very_attentive == 1) %>% 
   select(a_control:b_treatment) %>% 
   summarise_all(mean, na.rm=TRUE) %>% 
   mutate(A_dim = a_treatment - a_control, 
@@ -157,7 +156,9 @@ df %>%
 
 
 # Do we get the expected direction for C, D and E?
-df %>% select(a_control:e_treatment, c_direct, d_direct, e_direct) %>% 
+df %>%
+  filter(very_attentive == 1) %>% 
+  select(a_control:e_treatment, c_direct, d_direct, e_direct) %>% 
   summarise_all(mean, na.rm=TRUE) %>% 
   mutate(c_dim = c_treatment - c_control,
          d_dim = d_treatment - d_control,
@@ -168,7 +169,7 @@ df %>% select(a_control:e_treatment, c_direct, d_direct, e_direct) %>%
          #d_est = d_direct - d_dim, 
          #e_est = e_direct - e_dim, 
          #e_est_placebo = e_direct - e_dim_placebo
-         )%>% 
+         ) %>% 
   select(c_dim:e_dim_placebo, c_direct, d_direct, e_direct) %>% 
   gather() %>% 
   ggplot(aes(x=value, y=key, color = key)) +
@@ -186,7 +187,7 @@ df %>% group_by(placebo_direct) %>% summarise(N=n())
 #do we get fewer 1s when dropping inattentives? 
 #we can try with different attention checks here 
 
-df %>% filter(imc_2_1 == 1) %>% 
+df %>% filter(very_attentive == 1) %>% 
 group_by(placebo_direct) %>% summarise(N=n())
 
 ###
@@ -203,8 +204,8 @@ prmse <- function(estimand, treatment, control) {
 
 prmse_a <-  prmse(estimand = .25, df$a_treatment, df$a_control)
 
-#don't know how I failed with the function but I cant pie into it..
-df_att_a <- df %>% filter(fmc_a == 1) #lets filter on the fmc first
+#don't know how I failed with the function but I cant pipe into it..
+df_att_a <- df %>% filter(very_attentive == 1) #lets filter on the fmc first
 prmse_a_att <-  prmse(estimand = .25, df_att_a$a_treatment, df_att_a$a_control)
 
 #lower when dropping inattentives?
@@ -215,7 +216,7 @@ prmse_b <- prmse(estimand = (1/6), df$b_treatment, df$b_control)
 prmse_b_placebo <- prmse(estimand = (1/6), df$b_treatment, df$b_placebo) 
 
 #and for attentives only
-df_att_b <- df %>% filter(fmc_b == 1) 
+df_att_b <- df %>% filter(very_attentive == 1) 
 prmse_b_att <- prmse(estimand = (1/6), df_att_b$b_treatment, df_att_b$b_control) 
 prmse_b_placebo_att <- prmse(estimand = (1/6), df_att_b$b_treatment, df_att_b$b_placebo) 
 
@@ -224,8 +225,10 @@ prmse_b_placebo < prmse_b
 
 #lower dropping inattentive?
 prmse_b_att < prmse_b
+
 prmse_b_placebo_att < prmse_b_placebo
 
+prmse_b_placebo_att < prmse_b_att
 
 ###
 #Audit
@@ -233,9 +236,9 @@ prmse_b_placebo_att < prmse_b_placebo
 
 #effects on FMC A; B; and C
 
-a <- glm(fmc_a ~ audit, data = df) %>%  broom::tidy() 
-b <- glm(fmc_b ~ audit, data = df) %>%  broom::tidy()
-c <- glm(fmc_e ~ audit, data = df) %>%  broom::tidy()
+a <- glm(fmc_a ~ audit_pass, data = df) %>%  broom::tidy() 
+b <- glm(fmc_b ~ audit_pass, data = df) %>%  broom::tidy()
+c <- glm(fmc_e ~ audit_pass, data = df) %>%  broom::tidy()
   
 
 #install.pckages(dotwhisker)
@@ -248,7 +251,7 @@ rbind(a,b,c) %>%
   labs(title = "Estimated effect of audit message \non passing fmc")
 
 #how about audit on time?
-lm(time_spent ~ audit, data = df) %>%  
+lm(time_spent ~ audit_pass, data = df %>% filter(time_spent < 1000)) %>% 
   broom::tidy() %>%
   filter(term!="(Intercept)") %>% 
   dotwhisker::dwplot(vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2),
@@ -257,8 +260,8 @@ lm(time_spent ~ audit, data = df) %>%
   labs(title = "Estimated effect of audit message \non time spent")
   
 #prmse for audit/non audit
-df_audit <- df %>% filter(audit == "received")
-df_no_audit <- df %>% filter(audit == "control")
+df_audit <- df %>% filter(audit_pass == 1) %>% filter(attentive==1)
+df_no_audit <- df %>% filter(audit_pass == 0) %>% filter(attentive==1)
 
 prmse_a_audit <-  prmse(estimand = .25, df_audit$a_treatment, df_audit$a_control)
 prmse_a_no_audit <-  prmse(estimand = .25, df_no_audit$a_treatment, df_no_audit$a_control)
