@@ -1,0 +1,34 @@
+https://www.kva.se/en/utlysningar/stipendier-bidrag/generell-kungorelse-for-samhallsvetenskaper
+
+
+Project
+Improving Practices for Asking Sensitive Questions in Surveys
+52200
+
+Social scientists regularly ask sensitive questions in surveys. This is often necessary to investigate 
+research questions of great importance. However, respondents might be uncomfortable answering such questions 
+directly. Researchers have therefore developed certain techniques to ask sensitive questions indirectly, 
+in a way that is not intrusive. The so called *list experiment* is arguably the most popular among these tools. 
+While this method is very promising, it also has several important drawbacks. In particular, the technique works 
+poorly in the face of inattentive respondents - a problem that is greatly pronounced when vast amounts of survey 
+data nowadays is collected online. This project will develop and test diffferent strategies, grounded in previous 
+research, to minimize the negative effects of respondent inattention. The study we propose will allow us to give 
+concrete recommendations to applied researchers about best practices with regard to sensitive questions in surveys.  
+
+
+Budget
+Data collection, main sample (5000 respondents): 47400
+Pilot study (500 respondents): 4 800
+Total: 52 200
+
+
+Budget motivation
+All funding will go directly to the data collection for our study which will be conducted online to minimize costs. 
+Based on previous studies we have conducted with Luc.id, we estimate the cost per respondent to be 1 USD. The majority 
+of the expenses are payments to respondents for their participation in the study. The sample size calculations are 
+based on careful power analyses to determine the appropriate sample size. The study involves a pilot study with 500 
+respondents as well as the main study with 5000 respondents. 
+
+
+Ethical committee
+Lite osäker här, men tog "will be reviewed if it receives funds" - kanske är ljug?
