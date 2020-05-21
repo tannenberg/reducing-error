@@ -139,7 +139,7 @@ df %>%
   
 # and are we better at it dropping inattentives?
 df %>% 
-  filter(very_attentive == 1) %>% 
+  filter(fmc_b == 1 & attentive==1) %>% 
   select(a_control:b_treatment) %>% 
   summarise_all(mean, na.rm=TRUE) %>% 
   mutate(A_dim = a_treatment - a_control, 
@@ -162,15 +162,17 @@ df %>%
   summarise_all(mean, na.rm=TRUE) %>% 
   mutate(c_dim = c_treatment - c_control,
          d_dim = d_treatment - d_control,
-         e_dim = e_treatment - c_control,
-         e_dim = e_treatment - c_control,
+         e_dim = e_treatment - e_control,
          e_dim_placebo = e_treatment - e_placebo,
          #c_est = c_direct - c_dim, 
          #d_est = d_direct - d_dim, 
          #e_est = e_direct - e_dim, 
          #e_est_placebo = e_direct - e_dim_placebo
          ) %>% 
-  select(c_dim:e_dim_placebo, c_direct, d_direct, e_direct) %>% 
+  select(c_dim:e_dim_placebo, c_direct, d_direct, e_direct) 
+
+
+#%>% 
   gather() %>% 
   ggplot(aes(x=value, y=key, color = key)) +
   geom_point() +
