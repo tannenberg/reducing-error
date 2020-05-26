@@ -74,6 +74,94 @@ ggsave("psrm_replication/output/fig_1.pdf", width = 5, height = 2)
 estimates %>% mutate(bias = (1/6) - estimate)
 
 
+# lets show what happens to the estimates w.o. innatentives
+estimates$sample <- rep("Full", 2) 
+
+#using conventional control group (j=4) with only attentives
+m <- lm_robust(y_b ~ treat_b, data = df %>% filter(attentive==1)) %>% 
+  tidy() %>% 
+  slice(2) %>% 
+  mutate(model = "Conventional")
+
+n <- lm_robust(y_b ~ treat_b, data = df %>% filter(attentive==1)) %>%
+  nobs()
+
+conventional <- cbind(m,n) %>% 
+  mutate(model = paste(model, "\nN = ", as.character(n)), 
+         sample = "Attentive")
+
+
+#using placebo control group (j=5) with only attentives
+m <- lm_robust(y_b_placebo ~ treat_b, data = df %>% filter(attentive==1)) %>% 
+  tidy() %>% 
+  slice(2) %>% 
+  mutate(model = "Placebo")
+
+n <- lm_robust(y_b_placebo ~ treat_b, data = df %>% filter(attentive==1))%>%
+  nobs()
+
+placebo <- cbind(m,n) %>% 
+  mutate(model = paste(model, "\nN = ", as.character(n)), 
+         sample = "Attentive")
+
+# update estimate df
+estimates <- rbind(estimates, placebo, conventional)
+
+
+# and now only very attentive 
+
+#using conventional control group (j=4) with only very attentives
+m <- lm_robust(y_b ~ treat_b, data = df %>% filter(very_attentive==1)) %>% 
+  tidy() %>% 
+  slice(2) %>% 
+  mutate(model = "Conventional")
+
+n <- lm_robust(y_b ~ treat_b, data = df %>% filter(very_attentive==1)) %>%
+  nobs()
+
+conventional <- cbind(m,n) %>% 
+  mutate(model = paste(model, "\nN = ", as.character(n)), 
+         sample = "Very attentive")
+
+
+#using placebo control group (j=5) with only very attentives
+m <- lm_robust(y_b_placebo ~ treat_b, data = df %>% filter(very_attentive==1)) %>% 
+  tidy() %>% 
+  slice(2) %>% 
+  mutate(model = "Placebo")
+
+n <- lm_robust(y_b_placebo ~ treat_b, data = df %>% filter(very_attentive==1))%>%
+  nobs()
+
+placebo <- cbind(m,n) %>% 
+  mutate(model = paste(model, "\nN = ", as.character(n)), 
+         sample = "Very attentive")
+
+# update estimate df again
+estimates <- rbind(estimates, placebo, conventional) %>% 
+  mutate(control = ifelse(outcome == "y_b", "Conventional", "Placebo"))
+  
+estimates$sample = factor(estimates$sample, levels=c('Full','Attentive','Very attentive'))
+
+#lets see what that looks like
+estimates %>% 
+  ggplot() +
+  geom_pointrange(aes(x = estimate, xmin = conf.low, xmax = conf.high, 
+                      y = control, shape = control, linetype = control)) +
+  geom_vline(aes(xintercept = (1/6)), linetype= 2, alpha=.5) +
+  labs(y="", x="Estimated prevalence", shape="", linetype = "",
+       title = "") + 
+  theme(legend.position = "none") + 
+  facet_wrap(~sample)+
+  NULL
+
+ggsave("psrm_replication/output/fig_2.pdf", width = 5, height = 2)
+
+
+
+
+
+
 
 
   
