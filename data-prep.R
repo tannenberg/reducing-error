@@ -8,6 +8,4 @@ df <- rio::import("data/survey-data.csv") %>%
   select(age, income, education, work, female, urban_hukou, 
          b_treatment, b_control, b_placebo)
 
-names(df)
-
 write_csv(df, path = "psrm_replication/data/psrm-ds.csv")

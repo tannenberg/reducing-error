@@ -9,6 +9,7 @@
 library(tidyverse)
 library(estimatr)
 library(stargazer)
+library(texreg)
 
 
 #import dataset from /data folder
@@ -74,6 +75,7 @@ estimates %>% mutate(bias = (1/6) - estimate)
 
 
 
+
 ###
 # Appendix
 ###
@@ -116,4 +118,8 @@ cbind(treatment, control, placebo) %>%
 
 # results table
 
+m1 <- lm_robust(y_b ~ treat_b, data = df) 
+m2 <- lm_robust(y_b_placebo ~ treat_b, data = df)
 
+texreg(list(m1, m2), file = "psrm_replication/output/reg_table.tex",  include.ci = FALSE, 
+       custom.model.names = c("Conventional", "Placebo"))
